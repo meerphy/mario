@@ -28,7 +28,7 @@ def load_image(name, colorkey=None):
 
 FPS = 100
 clock = pygame.time.Clock()
-size = width, height = 500, 400
+size = width, height = 600, 600
 screen = pygame.display.set_mode(size)
 
 
@@ -95,14 +95,9 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
-    def update(self):
-        self.rect = self.image.get_rect().move(
-            tile_width * self.pos_x + 15, tile_height * self.pos_y + 5)
-
     def move(self, dx, dy):
-        self.pos_x += dx
-        self.pos_y += dy
-        self.update()
+        self.rect.x += dx * tile_width
+        self.rect.y += dy * tile_height
 
 
 player = None
@@ -151,10 +146,11 @@ if __name__ == '__main__':
 
     start_screen()
     player, level_x, level_y = generate_level(load_level('level01.txt'))
-
+    '''
     size = (level_x + 1) * tile_width, (level_y + 1) * tile_height
     screen = pygame.display.set_mode(size)
-
+    '''
+    camera = Camera()
     running = True
     while running:
         for event in pygame.event.get():
@@ -178,8 +174,10 @@ if __name__ == '__main__':
                     if pygame.sprite.spritecollideany(player, wall_group):
                         player.move(0, 1)
 
-        all_sprites.update()
-        screen.fill((255, 255, 255))
+        screen.fill((0, 0, 0))
+        camera.update(player)
+        for sprite in all_sprites:
+            camera.apply(sprite)
         all_sprites.draw(screen)
         player_group.draw(screen)
         pygame.display.flip()
