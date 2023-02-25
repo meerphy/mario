@@ -26,12 +26,6 @@ def load_image(name, colorkey=None):
     return image
 
 
-FPS = 100
-clock = pygame.time.Clock()
-size = width, height = 500, 400
-screen = pygame.display.set_mode(size)
-
-
 def terminate():
     pygame.quit()
     sys.exit()
@@ -147,10 +141,16 @@ class Camera:
 
 
 if __name__ == '__main__':
+    number = input("Введите имя файла уровня: ")
+
+    FPS = 100
+    clock = pygame.time.Clock()
+    size = width, height = 500, 400
+    screen = pygame.display.set_mode(size)
     pygame.init()
 
     start_screen()
-    player, level_x, level_y = generate_level(load_level('level01.txt'))
+    player, level_x, level_y = generate_level(load_level(number))
 
     size = (level_x + 1) * tile_width, (level_y + 1) * tile_height
     screen = pygame.display.set_mode(size)
